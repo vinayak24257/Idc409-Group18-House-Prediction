@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local raw data: obtain from the documented source
+data/raw/*
+
+# Generated intermediate data
+data/processed/*
+
+# Keep the documentation files trackable
+!data/raw/README.md
+!data/processed/README.md
