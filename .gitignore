@@ -16,3 +16,11 @@ data/processed/*
 # Keep the documentation files trackable
 !data/raw/README.md
 !data/processed/README.md
+
+# Local model artifacts generated during training
+models/*.joblib
+models/*.pkl
+models/*.json
+
+# Local backup of the original UI
+app.py.backup
