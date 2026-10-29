@@ -27,8 +27,6 @@ def build_pipeline(X):
         ("scaler", StandardScaler()),
     ])
 
-    # Sparse one-hot output is supported by XGBoost and avoids a large dense
-    # matrix for the high-cardinality categorical features in Ames Housing.
     categorical_pipeline = Pipeline([
         ("imputer", SimpleImputer(strategy="most_frequent")),
         ("encoder", OneHotEncoder(
@@ -90,12 +88,11 @@ def main():
     print(f"MAE:  ${mae:,.2f}")
     print(f"R2:   {r2:.4f}")
 
-    # Refit the deployment pipeline on all labelled rows after measuring
-    # performance on the held-out validation set.
+    # Refit the deployment pipeline on all labelled rows after validation.
     final_pipeline = build_pipeline(X)
     final_pipeline.fit(X, y)
 
-    # Preserve the complete input row expected by the existing Streamlit app.
+    # Keep a complete input row and allow numeric medians to be assigned safely.
     base_row = X.iloc[[0]].astype(object).copy()
     numeric = X.select_dtypes(include=["number"]).columns.tolist()
     categorical = X.select_dtypes(
