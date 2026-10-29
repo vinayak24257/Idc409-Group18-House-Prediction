@@ -3,3 +3,7 @@ pandas
 matplotlib
 jupyter
 ipykernel
+scikit-learn
+streamlit
+joblib
+xgboost==3.4.1
