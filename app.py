@@ -6,15 +6,15 @@ import joblib
 import json
 from pathlib import Path
 
-# â”€â”€ Page config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Page config
 st.set_page_config(
-    page_title="House Price Predictor Â· IDC 409",
-    page_icon="ðŸ ",
+    page_title="House Price Predictor - IDC 409",
+    page_icon="H",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# â”€â”€ Custom CSS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Custom CSS
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
@@ -82,8 +82,8 @@ header {background: transparent;}
 </style>
 """, unsafe_allow_html=True)
 
-# â”€â”€ Load artifacts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-# NEW â€” works both locally and on Streamlit Cloud
+# Load artifacts
+# NEW - works both locally and on Streamlit Cloud
 PROJECT_ROOT = Path(__file__).parent
 
 @st.cache_resource
@@ -115,7 +115,7 @@ CAT_COLS = [
     'SaleType','SaleCondition'
 ]
 
-# â”€â”€ Prediction function â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Prediction function
 def predict_price(user_inputs):
     row = base_row.copy()
 
@@ -139,8 +139,8 @@ def make_gauge(predicted, low, high):
 
     zones = [
         (34900,  130000, "#66bb6a", "Budget\n< $130k"),
-        (130000, 200000, "#42a5f5", "Mid-Range\n$130â€“200k"),
-        (200000, 300000, "#ffa726", "Above Avg\n$200â€“300k"),
+        (130000, 200000, "#42a5f5", "Mid-Range\n$130-200k"),
+        (200000, 300000, "#ffa726", "Above Avg\n$200-300k"),
         (300000, 755000, "#ef5350", "Premium\n> $300k"),
     ]
     for start, end, color, label in zones:
@@ -174,7 +174,7 @@ def make_gauge(predicted, low, high):
     plt.tight_layout(pad=0.4)
     return fig
 
-# â”€â”€ Verdict â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Verdict
 def verdict(price):
     if price < 130000:
         return "Budget", "vb"
@@ -185,32 +185,32 @@ def verdict(price):
     else:
         return "Premium", "vp"
 
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# Section
 # HEADER
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# Section
 st.markdown("""
 <div class="app-header">
-  <h1>ðŸ  House Price Predictor</h1>
-  <p class="sub">IDC 409 &nbsp;Â·&nbsp; Group 18 &nbsp;Â·&nbsp; IISER Mohali</p>
+  <h1>House Price Predictor</h1>
+  <p class="sub">IDC 409 &nbsp; - &nbsp; Group 18 &nbsp; - &nbsp; IISER Mohali</p>
   <div class="badges">
-    <span class="badge">HistGradientBoosting</span>
-    <span class="badge">Holdout R-squared = 0.892</span>
-    <span class="badge">Holdout MAE = $16,668</span>
+    <span class="badge">XGBoost</span>
+    <span class="badge">Holdout R-squared = 0.926</span>
+    <span class="badge">Holdout MAE = $15,127</span>
     <span class="badge">Ames Housing Dataset</span>
     <span class="badge">1,460 training houses</span>
   </div>
 </div>
 """, unsafe_allow_html=True)
 
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-# SIDEBAR â€” ALL INPUTS
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# Section
+# SIDEBAR - ALL INPUTS
+# Section
 with st.sidebar:
-    st.markdown("## âš™ï¸ House Parameters")
+    st.markdown("## House Parameters")
     st.caption("Adjust sliders and dropdowns, then click **Predict**.")
 
-    # â”€â”€ Size & Space â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown('<div class="sec-head">ðŸ“ Size & Space</div>',
+# Size  Space
+    st.markdown('<div class="sec-head">Size & Space</div>',
                 unsafe_allow_html=True)
 
     gr_liv_area = st.slider(
@@ -224,11 +224,11 @@ with st.sidebar:
         format_func=lambda x: f"{x} car{'s' if x != 1 else ''}"
     )
 
-    # â”€â”€ Quality & Condition â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown('<div class="sec-head">â­ Quality & Condition</div>',
+# Quality  Condition
+    st.markdown('<div class="sec-head">Quality & Condition</div>',
                 unsafe_allow_html=True)
 
-    overall_qual = st.slider("Overall Quality  (1 = Poor â†’ 10 = Excellent)",
+    overall_qual = st.slider("Overall Quality  (1 = Poor -> 10 = Excellent)",
                               1, 10, 6)
     qual_labels = {
         1:"Very Poor", 2:"Poor", 3:"Fair", 4:"Below Average",
@@ -246,8 +246,8 @@ with st.sidebar:
         }[x]
     )
 
-    # â”€â”€ Age & History â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown('<div class="sec-head">ðŸ—ï¸ Age & History</div>',
+# Age  History
+    st.markdown('<div class="sec-head">Age & History</div>',
                 unsafe_allow_html=True)
 
     year_built = st.slider("Year Built", 1872, 2010, 1990)
@@ -257,8 +257,8 @@ with st.sidebar:
         help="Same as Year Built if never remodelled"
     )
 
-    # â”€â”€ Basement â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown('<div class="sec-head">ðŸšï¸ Basement</div>',
+# Basement
+    st.markdown('<div class="sec-head">Basement</div>',
                 unsafe_allow_html=True)
 
     bsmt_qual = st.selectbox(
@@ -270,15 +270,15 @@ with st.sidebar:
             "Fa": "Fair",      "Unknown": "No Basement"
         }[x]
     )
-    # bsmt_qual is now defined â€” safe to use below
+    # bsmt_qual is now defined - safe to use below
     if bsmt_qual == "Unknown":
         total_bsmt_sf = 0
-        st.info("No basement â†’ area set to 0 sq ft")
+        st.info("No basement -> area set to 0 sq ft")
     else:
         total_bsmt_sf = st.slider("Basement Area (sq ft)", 0, 3000, 800, 50)
 
-    # â”€â”€ Other â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    st.markdown('<div class="sec-head">ðŸš¿ Other</div>',
+# Other
+    st.markdown('<div class="sec-head">Other</div>',
                 unsafe_allow_html=True)
 
     full_bath = st.select_slider(
@@ -287,22 +287,22 @@ with st.sidebar:
     )
 
     st.markdown("---")
-    predict_btn = st.button("ðŸ”®  Predict Price",
-                             type="primary", use_container_width=True)
+    predict_btn = st.button("Predict Price",
+                             type="primary", width="stretch")
 
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# Section
 # MAIN AREA
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# Section
 if not predict_btn:
     # Welcome screen
     st.markdown("""
     <div class="welcome">
-      <h3>â† Fill in the house details</h3>
+      <h3>Fill in the house details</h3>
       <p>Adjust the parameters in the sidebar and click <b>Predict Price</b>
-         to get an estimated sale price and an illustrative ?10% range.</p>
+         to get an estimated sale price and an illustrative +/-10% range.</p>
       <br>
       <p style="font-size:0.78rem;color:#bbb;">
-        Ames Housing Dataset Â· Iowa, USA Â· 2006â€“2010 Â· Prices in USD
+        Ames Housing Dataset - Iowa, USA - 2006-2010 - Prices in USD
       </p>
     </div>
     """, unsafe_allow_html=True)
@@ -319,18 +319,18 @@ if not predict_btn:
     with c2:
         st.markdown("""<div class="stat-card">
             <p class="stat-lbl">Holdout Mean Absolute Error</p>
-            <p class="stat-val">$16,668</p>
+            <p class="stat-val">$15,127</p>
             <p class="stat-sub">Measured on the 20% holdout set</p>
         </div>""", unsafe_allow_html=True)
     with c3:
         st.markdown("""<div class="stat-card">
-            <p class="stat-lbl">RÂ² Score</p>
-            <p class="stat-val">0.892</p>
+            <p class="stat-lbl">R-squared Score</p>
+            <p class="stat-val">0.9256</p>
             <p class="stat-sub">Holdout validation R-squared</p>
         </div>""", unsafe_allow_html=True)
 
 else:
-    # â”€â”€ Run prediction â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Run prediction
     with st.spinner("Running house-price prediction..."):
         result = predict_price({
             "OverallQual"  : overall_qual,
@@ -353,13 +353,13 @@ else:
     pct_diff   = round((price - np.mean(all_prices)) / np.mean(all_prices) * 100, 1)
     direction  = "above" if pct_diff >= 0 else "below"
 
-    # â”€â”€ Price card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Price card
     st.markdown(f"""
     <div class="price-card">
       <p class="price-label">Predicted Sale Price</p>
       <p class="price-value">${price:,}</p>
       <p class="price-range">
-        Indicative estimate range &nbsp; <b>${low:,}</b> â€“ <b>${high:,}</b> &nbsp;(Â±10%)
+        Indicative estimate range &nbsp; <b>${low:,}</b> - <b>${high:,}</b> &nbsp;(+/-10%)
       </p>
       <div style="margin-top:0.7rem;">
         <span class="verdict {vcls}">{vlab}</span>
@@ -369,14 +369,14 @@ else:
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # â”€â”€ Gauge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Gauge
     fig = make_gauge(price, low, high)
-    st.pyplot(fig, use_container_width=True)
+    st.pyplot(fig, width="stretch")
     plt.close()
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # â”€â”€ Four stat cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Four stat cards
     s1, s2, s3, s4 = st.columns(4)
     with s1:
         st.markdown(f"""<div class="stat-card">
@@ -394,7 +394,7 @@ else:
         st.markdown(f"""<div class="stat-card">
             <p class="stat-lbl">Confidence Width</p>
             <p class="stat-val">${(high - low)//1000}k</p>
-            <p class="stat-sub">Range of Â±10% interval</p>
+            <p class="stat-sub">Range of +/-10% interval</p>
         </div>""", unsafe_allow_html=True)
     with s4:
         ppsf = round(price / max(gr_liv_area, 1))
@@ -406,7 +406,7 @@ else:
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # â”€â”€ Input summary table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Input summary table
     st.markdown("#### Summary of inputs used")
     left, right = st.columns(2)
 
@@ -420,7 +420,7 @@ else:
         st.markdown(f"""
 | Feature | Value |
 |---|---|
-| Overall Quality | {overall_qual}/10 â€” {qual_labels[overall_qual]} |
+| Overall Quality | {overall_qual}/10 - {qual_labels[overall_qual]} |
 | Living Area | {gr_liv_area:,} sq ft |
 | First Floor Area | {first_flr_sf:,} sq ft |
 | Kitchen Quality | {kq_map[kitchen_qual]} |
@@ -432,22 +432,22 @@ else:
 | Year Built | {year_built} |
 | Year Remodelled | {year_remod} |
 | Garage | {garage_cars} car{'s' if garage_cars != 1 else ''} |
-| Basement | {bq_map[bsmt_qual]} Â· {bsf_str} |
+| Basement | {bq_map[bsmt_qual]} - {bsf_str} |
 """)
 
-    # â”€â”€ Dataset note â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Dataset note
     st.markdown("""
     <div class="info-note">
-      âš ï¸ <b>Context note:</b> Predictions are based on Ames, Iowa USA housing
-      sales from 2006â€“2010. All prices are in 2006â€“2010 USD and do <b>not</b>
+        <b>Context note:</b> Predictions are based on Ames, Iowa USA housing
+      sales from 2006-2010. All prices are in 2006-2010 USD and do <b>not</b>
       represent Indian real estate or current market values.
     </div>
     """, unsafe_allow_html=True)
 
-    # â”€â”€ Model details (expandable) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Model details (expandable)
     with st.expander("Model and pipeline details"):
         st.markdown("""
-**Algorithm:** HistGradientBoostingRegressor (scikit-learn)
+**Algorithm:** XGBRegressor (XGBoost)
 
 **Training data:** Ames Housing dataset, 1,460 houses. Holdout evaluation used an 80/20 split with random state 42.
 
@@ -455,20 +455,62 @@ else:
 
 | Metric | Result |
 |---|---:|
-| RMSE | $28,821 |
-| MAE | $16,668 |
-| R-squared | 0.8917 |
+| RMSE | $23,895 |
+| MAE | $15,127 |
+| R-squared | 0.9256 |
 
 **Important:** These are holdout metrics, not a guarantee of an individual prediction's accuracy. The displayed plus/minus 10% range is an illustrative range, not a statistically calibrated confidence interval.
 
 The model uses property characteristics and preprocessing fitted on the training data. Predictions concern historical Ames, Iowa housing data and do not represent current prices or Indian real estate.
         """)
 
-# â”€â”€ Footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# Footer
+
+# MODEL_SELECTION_SECTION_V1
+st.markdown("""
+<div style="margin: 1.5rem 0 1rem 0;">
+  <h2>How we selected the model</h2>
+  <p>We evaluated four regression models on the same 80/20 holdout split
+  (random_state=42). Lower RMSE and MAE are better; higher R-squared is better.</p>
+</div>
+""", unsafe_allow_html=True)
+
+comparison = [
+    {"Model": "XGBoost", "Validation RMSE": "$23,895.42",
+     "Validation MAE": "$15,126.71", "R-squared": "0.9256",
+     "Outcome": "Selected"},
+    {"Model": "HistGradientBoosting", "Validation RMSE": "$28,821.19",
+     "Validation MAE": "$16,668.04", "R-squared": "0.8917",
+     "Outcome": "Compared"},
+    {"Model": "Random Forest", "Validation RMSE": "$28,845.87",
+     "Validation MAE": "$17,468.11", "R-squared": "0.8915",
+     "Outcome": "Compared"},
+    {"Model": "Linear Regression", "Validation RMSE": "$29,475.52",
+     "Validation MAE": "$18,287.85", "R-squared": "0.8867",
+     "Outcome": "Baseline"},
+]
+st.dataframe(comparison, hide_index=True, width="stretch")
+
+st.markdown("""
+<div style="border-left: 4px solid #42a5f5; padding: 0.7rem 1rem;
+            margin: 0.8rem 0 1.2rem 0;">
+  <b>Why XGBoost?</b><br>
+  XGBoost achieved the lowest holdout RMSE and MAE and the highest R-squared
+  among the four evaluated models. Holdout RMSE was $23,895.42, MAE was
+  $15,126.71, and R-squared was 0.9256. After evaluation, the deployment
+  pipeline was refit on all labelled training rows.
+</div>
+<p style="font-size: 0.85rem; opacity: 0.8;">
+  The displayed +/-10% range is illustrative, not a statistically calibrated
+  confidence interval. The dataset contains historical Ames, Iowa sales and
+  does not represent current prices or Indian real estate.
+</p>
+""", unsafe_allow_html=True)
+
 st.markdown("""
 <div class="footer">
-  IDC 409 Â· Data Science & Machine Learning Â· Project 15: House Price Prediction<br>
-  Group 18 Â· IISER Mohali Â· 2026 &nbsp;|&nbsp;
-  HistGradientBoosting Â· Ames Housing Dataset (Iowa, USA, 2006â€“2010)
+  IDC 409 - Data Science & Machine Learning - Project 15: House Price Prediction<br>
+  Group 18 - IISER Mohali - 2026 &nbsp;|&nbsp;
+  XGBoost - Ames Housing Dataset (Iowa, USA, 2006-2010)
 </div>
 """, unsafe_allow_html=True)
