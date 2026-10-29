@@ -4,12 +4,12 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import HistGradientBoostingRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from xgboost import XGBRegressor
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "data" / "raw" / "ames_housing" / "train.csv"
@@ -19,7 +19,7 @@ MODEL_PATH = ROOT / "models" / "house_price_bundle.joblib"
 def build_pipeline(X):
     numeric = X.select_dtypes(include=["number"]).columns.tolist()
     categorical = X.select_dtypes(
-        include=["object", "category", "bool"]
+        include=["object", "category", "bool", "str"]
     ).columns.tolist()
 
     numeric_pipeline = Pipeline([
@@ -31,7 +31,7 @@ def build_pipeline(X):
         ("imputer", SimpleImputer(strategy="most_frequent")),
         ("encoder", OneHotEncoder(
             handle_unknown="ignore",
-            sparse_output=False,
+            sparse_output=True,
         )),
     ])
 
@@ -40,12 +40,17 @@ def build_pipeline(X):
         ("categorical", categorical_pipeline, categorical),
     ])
 
-    model = HistGradientBoostingRegressor(
-        max_iter=200,
-        learning_rate=0.05,
-        max_leaf_nodes=20,
-        l2_regularization=1.0,
+    model = XGBRegressor(
+        n_estimators=500,
+        max_depth=3,
+        learning_rate=0.04,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        reg_lambda=1.0,
+        objective="reg:squarederror",
         random_state=42,
+        n_jobs=4,
+        tree_method="hist",
     )
 
     return Pipeline([
@@ -78,18 +83,16 @@ def main():
     mae = float(mean_absolute_error(y_valid, predictions))
     r2 = float(r2_score(y_valid, predictions))
 
-    print("Holdout validation metrics")
+    print("XGBoost holdout validation metrics (80/20 split, random_state=42)")
     print(f"RMSE: ${rmse:,.2f}")
     print(f"MAE:  ${mae:,.2f}")
     print(f"R2:   {r2:.4f}")
 
-    # Retrain the deployment pipeline on all available labelled rows.
+    # Refit the deployment pipeline on all labelled rows after validation.
     final_pipeline = build_pipeline(X)
     final_pipeline.fit(X, y)
 
-    # Keep one complete input row so the app always supplies every feature.
-    # Use a fresh row with object-compatible columns so numeric medians
-    # such as 9478.5 can be assigned without integer dtype errors.
+    # Keep a complete input row and allow numeric medians to be assigned safely.
     base_row = X.iloc[[0]].astype(object).copy()
     numeric = X.select_dtypes(include=["number"]).columns.tolist()
     categorical = X.select_dtypes(
@@ -120,12 +123,12 @@ def main():
             "mae": mae,
             "r2": r2,
         },
-        "model_name": "HistGradientBoostingRegressor",
+        "model_name": "XGBRegressor",
     }
 
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(bundle, MODEL_PATH)
-    print(f"Saved model bundle: {MODEL_PATH}")
+    print(f"Saved XGBoost model bundle: {MODEL_PATH}")
 
 
 if __name__ == "__main__":
